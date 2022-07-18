@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DiegoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Citas">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="created_at" Type="datetime" Nullable="false" />
+    <Property Name="updated_at" Type="datetime" />
+    <Property Name="deleted_at" Type="datetime" />
+    <Property Name="paciente" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="fecha" Type="date" Nullable="false" />
+    <Property Name="consultorio_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Consultorios">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="created_at" Type="datetime" Nullable="false" />
+    <Property Name="updated_at" Type="datetime" />
+    <Property Name="deleted_at" Type="datetime" />
+    <Property Name="encargado" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="nombre_consultorio" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="piso_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Pisos">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="created_at" Type="datetime" Nullable="false" />
+    <Property Name="updated_at" Type="datetime" />
+    <Property Name="deleted_at" Type="datetime" />
+    <Property Name="nombre" Type="varchar" MaxLength="255" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Usuarios">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="created_at" Type="datetime" Nullable="false" />
+    <Property Name="username" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="password" Type="varchar" MaxLength="255" Nullable="false" />
+  </EntityType>
+  <Association Name="Citas_relation_1">
+    <End Role="Consultorios" Type="Self.Consultorios" Multiplicity="1" />
+    <End Role="Citas" Type="Self.Citas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Consultorios">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Citas">
+        <PropertyRef Name="consultorio_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Consultorios_relation_1">
+    <End Role="Pisos" Type="Self.Pisos" Multiplicity="1" />
+    <End Role="Consultorios" Type="Self.Consultorios" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pisos">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Consultorios">
+        <PropertyRef Name="piso_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DiegoModelStoreContainer">
+    <EntitySet Name="Citas" EntityType="Self.Citas" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Consultorios" EntityType="Self.Consultorios" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Pisos" EntityType="Self.Pisos" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="Citas_relation_1" Association="Self.Citas_relation_1">
+      <End Role="Consultorios" EntitySet="Consultorios" />
+      <End Role="Citas" EntitySet="Citas" />
+    </AssociationSet>
+    <AssociationSet Name="Consultorios_relation_1" Association="Self.Consultorios_relation_1">
+      <End Role="Pisos" EntitySet="Pisos" />
+      <End Role="Consultorios" EntitySet="Consultorios" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DiegoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Cita">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="updated_at" Type="DateTime" Precision="3" />
+    <Property Name="deleted_at" Type="DateTime" Precision="3" />
+    <Property Name="paciente" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="consultorio_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Consultorio" Relationship="Self.Citas_relation_1" FromRole="Citas" ToRole="Consultorios" />
+  </EntityType>
+  <EntityType Name="Consultorio">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="updated_at" Type="DateTime" Precision="3" />
+    <Property Name="deleted_at" Type="DateTime" Precision="3" />
+    <Property Name="encargado" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="nombre_consultorio" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="piso_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Citas" Relationship="Self.Citas_relation_1" FromRole="Consultorios" ToRole="Citas" />
+    <NavigationProperty Name="Piso" Relationship="Self.Consultorios_relation_1" FromRole="Consultorios" ToRole="Pisos" />
+  </EntityType>
+  <EntityType Name="Piso">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="updated_at" Type="DateTime" Precision="3" />
+    <Property Name="deleted_at" Type="DateTime" Precision="3" />
+    <Property Name="nombre" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Consultorios" Relationship="Self.Consultorios_relation_1" FromRole="Pisos" ToRole="Consultorios" />
+  </EntityType>
+  <EntityType Name="Usuario">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="username" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <Association Name="Citas_relation_1">
+    <End Role="Consultorios" Type="Self.Consultorio" Multiplicity="1" />
+    <End Role="Citas" Type="Self.Cita" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Consultorios">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Citas">
+        <PropertyRef Name="consultorio_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Consultorios_relation_1">
+    <End Role="Pisos" Type="Self.Piso" Multiplicity="1" />
+    <End Role="Consultorios" Type="Self.Consultorio" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pisos">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Consultorios">
+        <PropertyRef Name="piso_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DatabaseEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Citas" EntityType="Self.Cita" />
+    <EntitySet Name="Consultorios" EntityType="Self.Consultorio" />
+    <EntitySet Name="Pisos" EntityType="Self.Piso" />
+    <EntitySet Name="Usuarios" EntityType="Self.Usuario" />
+    <AssociationSet Name="Citas_relation_1" Association="Self.Citas_relation_1">
+      <End Role="Consultorios" EntitySet="Consultorios" />
+      <End Role="Citas" EntitySet="Citas" />
+    </AssociationSet>
+    <AssociationSet Name="Consultorios_relation_1" Association="Self.Consultorios_relation_1">
+      <End Role="Pisos" EntitySet="Pisos" />
+      <End Role="Consultorios" EntitySet="Consultorios" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
