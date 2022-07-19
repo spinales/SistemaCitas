@@ -19,6 +19,7 @@ namespace SistemaCitas
             this.dataGridView1.Columns.Add("ID", "ID");
             this.dataGridView1.Columns.Add("Paciente", "Paciente");
             this.dataGridView1.Columns.Add("Fecha", "Fecha");
+            this.dataGridView1.Columns.Add("Consultorio", "Consultorio");
             actualizar();
             using (DatabaseEntities db = new DatabaseEntities())
             {
@@ -27,7 +28,11 @@ namespace SistemaCitas
                 {
                     cbconsultorio.Items.Add(c.nombre_consultorio);
                 }
-                cbconsultorio.SelectedIndex = 0;
+                if(cbconsultorio.Items.Count > 0)
+                {
+                    cbconsultorio.SelectedIndex = 0;
+                }
+                
             }
         }
 
@@ -39,7 +44,8 @@ namespace SistemaCitas
                 var citas = db.Citas.ToList();
                 foreach (var c in citas)
                 {
-                    this.dataGridView1.Rows.Add(c.id, c.paciente, c.fecha);
+                    var consultorio = db.Consultorios.Find(c.consultorio_id);
+                    this.dataGridView1.Rows.Add(c.id, c.paciente, c.fecha,consultorio.nombre_consultorio);
                 }
             }
         }
